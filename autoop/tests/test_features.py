@@ -73,3 +73,11 @@ class TestFeatures(unittest.TestCase):
         for detected_feature in filter(lambda x: x.name in categorical_columns,
                                        features):
             self.assertEqual(detected_feature.type, "categorical")
+
+
+def main():
+    unittest.main()
+
+
+if __name__ == '__main__':
+    main()
