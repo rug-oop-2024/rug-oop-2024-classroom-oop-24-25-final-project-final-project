@@ -153,7 +153,7 @@ If you did not implement the feature
 
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
 |-------------------------------------- |--------------|----------------------|--------------------------|---------|         
-| Up-to-date requirements.txt           | NF           |                      |         | |
+| Up-to-date requirements.txt           | NF           |Jia Hao Zhang         |x        | |only garentee to work for the premade test.
 | `ML/detect-features`                  | FN           |                      |         | |
 | `ML/artifact`                         | NF           |                      |         | |
 | `ML/feature`                          | NF           |                      |         | |
