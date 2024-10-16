@@ -1,8 +1,11 @@
 
-from typing import List
+from typing import List, TYPE_CHECKING
 from autoop.core.ml.dataset import Dataset
 from autoop.core.ml.feature import Feature
 import numpy as np
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def detect_feature_types(dataset: Dataset) -> List[Feature]:
@@ -12,8 +15,8 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
     Returns:
         List[Feature]: List of features with their types.
     """
-    data = dataset.read()
-    feature_list = []
+    data: pd.DataFrame = dataset.read()
+    feature_list: list[Feature] = []
     for label in data.columns:
         data_type: str = None
         match data[label].dtype:

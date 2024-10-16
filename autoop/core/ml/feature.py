@@ -7,6 +7,10 @@ from autoop.core.ml.dataset import Dataset
 
 
 class Feature(BaseModel):
+    """Feature.
+        name (str): name of feature.
+        type (str): type of feature.
+    """
     # attributes here
     name: str = Field()
     type: str = Field()
