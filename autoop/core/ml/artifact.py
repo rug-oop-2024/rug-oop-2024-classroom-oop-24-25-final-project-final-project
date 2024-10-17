@@ -12,10 +12,13 @@ class Artifact(BaseModel):
         type (str): type of artifact
     """
     name: str = Field()
-    asset_path: str = Field()
+    asset_path: str = Field(default=None)
     data: bytes = Field()
-    version: str = Field()
-    type: str = Field()
+    version: str = Field(default="1.0.0")
+    type: str = Field(default=None)
+    metadata: dict = Field(default={"experiment_id": None,
+                                    "run_id": None})
+    tags: list[str] = Field(default=[])
 
     def read(self) -> bytes:
         return self.data
