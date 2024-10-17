@@ -36,7 +36,8 @@ class Database():
             collection (str): The collection to get the data from
             id (str): The id of the data
         Returns:
-            Union[dict, None]: The data that was stored, or None if it doesn't exist
+            Union[dict, None]: The data that was stored, or None if it doesn't
+            exist
         """
         if not self._data.get(collection, None):
             return None

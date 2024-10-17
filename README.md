@@ -153,9 +153,9 @@ If you did not implement the feature
 
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
 |-------------------------------------- |--------------|----------------------|--------------------------|---------|         
-| Up-to-date requirements.txt           | NF           |Jia Hao Zhang         |x        | |only garentee to work for the premade test.
-| `ML/detect-features`                  | FN           |Jia Hao Zhang         |         | |
-| `ML/artifact`                         | NF           |                      |         | |
+| `Up-to-date requirements.txt`         | NF           |Jia Hao Zhang         |x        | |only the base packages(15-10-2024)
+| `ML/detect-features`                  | FN           |Jia Hao Zhang         |x        | |only garentee to work for the premade test.
+| `ML/artifact`                         | NF           |Jia Hao Zhang         |x        | |Added atributes that were in instructions into the class, without breaking detect feature. not garrenteed to work on other situations.
 | `ML/feature`                          | NF           |                      |         | |
 | `ML/metric`                           | NF           |                      |         | |
 | `ML/metric/extensions`                | FN           |                      |         | |
