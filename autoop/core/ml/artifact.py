@@ -9,7 +9,9 @@ class Artifact(BaseModel):
         asset_path (str): path of the asset.
         data (bytes): base64 encoded path to the data.
         version (str): version of the artifact.
-        type (str): type of artifact
+        type (str): type of artifact.
+        metadata (dict): dictionary with experiment and run id.
+        tags (list): list of tags for the artifact.
     """
     name: str = Field()
     asset_path: str = Field(default=None)

@@ -13,7 +13,7 @@ class Feature(BaseModel):
     """
     # attributes here
     name: str = Field()
-    type: str = Field()
+    type: Literal["numerical", "categorical"] = Field()
 
     def __str__(self):
-        raise NotImplementedError("To be implemented.")
+        raise f"Column {self.name} is {self.type}"
