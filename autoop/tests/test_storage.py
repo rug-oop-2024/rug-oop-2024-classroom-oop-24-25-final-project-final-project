@@ -48,3 +48,11 @@ class TestStorage(unittest.TestCase):
         keys = self.storage.list("test")
         keys = ["/".join(key.split("/")[-2:]) for key in keys]
         self.assertEqual(set(keys), set(random_keys))
+
+
+def main():
+    unittest.main()
+
+
+if __name__ == '__main__':
+    main()
