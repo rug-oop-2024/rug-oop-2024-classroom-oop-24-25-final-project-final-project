@@ -69,16 +69,15 @@ class Metric(ABC):
         ...
 
 
-# TODO: Move to extensions
 class MeanSquaredError(Metric):
-    """Mean Squared Error metric implementation."""
+    """Mean Squared Error metric implementation for regression."""
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray):
         return np.mean((truth - pred) ** 2)
 
 
 class Accuracy(Metric):
-    """Accuracy metric implementation."""
+    """Accuracy metric implementation for classification."""
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray):
         return np.mean(truth == pred)
