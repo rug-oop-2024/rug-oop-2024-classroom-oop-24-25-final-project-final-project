@@ -153,12 +153,12 @@ If you did not implement the feature
 
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
 |-------------------------------------- |--------------|----------------------|--------------------------|---------|         
-| `Up-to-date requirements.txt`         | NF           |Jia Hao Zhang         |x        | |only the base packages(15-10-2024)
-| `ML/detect-features`                  | FN           |Jia Hao Zhang         |x        | |only garentee to work for the premade test.
-| `ML/artifact`                         | NF           |Jia Hao Zhang         |x        | |Added atributes that were in instructions into the class, without breaking detect feature. not garrenteed to work on other situations.
-| `ML/feature`                          | NF           |Jia Hao Zhang         |x        | |Made type in feature a literal to make sure the user complies tih the two types of data. the class is only garenteed to work with test feature detect and no other processes.
-| `ML/metric`                           | NF           |Marcus Persson        |         | |
-| `ML/metric/extensions`                | FN           |Marcus Persson        |         | |
+| `Up-to-date requirements.txt`         | NF           |Jia Hao Zhang         |x        | only the base packages(15-10-2024)
+| `ML/detect-features`                  | FN           |Jia Hao Zhang         |x        | only garentee to work for the premade test.
+| `ML/artifact`                         | NF           |Jia Hao Zhang         |x        | Added atributes that were in instructions into the class, without breaking detect feature. not garrenteed to work on other situations.
+| `ML/feature`                          | NF           |Jia Hao Zhang         |x        | Made type in feature a literal to make sure the user complies tih the two types of data. the class is only garenteed to work with test feature detect and no other processes.
+| `ML/metric`                           | NF           |Marcus Persson        |x| Figuring out typing.
+| `ML/metric/extensions`                | FN           |Marcus Persson        |x| Unsure if to make new objects or not.
 | `ML/model`                            | NF           |Marcus Persson        |         | |
 | `ML/model/extensions`                 | FN           |Marcus Persson        |         | |
 | `ML/pipeline/evaluation`              | FN           |Marcus Persson        |         | | 

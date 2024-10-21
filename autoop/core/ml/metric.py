@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+# TODO: Unsure what to use typing for
 from typing import Any
 import numpy as np
 
@@ -6,23 +7,77 @@ METRICS = [
     "mean_squared_error",
     "accuracy",
 ]
-# add the names (in strings) of the metrics you implement
 
 
-def get_metric(name: str):
-    # Factory function to get a metric by name.
-    # Return a metric instance given its str name.
-    raise NotImplementedError("To be implemented.")
-
-
-class Metric(...):
-    """Base class for all metrics.
+def get_metric(name: str) -> "Metric":
     """
-    # your code here
-    # remember: metrics take ground truth and prediction as input and
-    # return a real number
+    Return metric instance given by name.
 
-    def __call__(self):
-        raise NotImplementedError("To be implemented.")
+    Parameters
+    ----------
+    name : str
+        Metric name.
 
-# add here concrete implementations of the Metric class
+    Returns
+    -------
+    any
+        Metric instance matching name.
+
+    Raises
+    ------
+    ValueError
+        If the name matches no instance or is incorrectly spelt.
+    NotImplementedError
+        If the name matches the instance but is not implemented.
+    """
+    if name in METRICS:
+        # Parse string to match the class name.
+        class_name = ''.join(word.capitalize() for word in name.split('_'))
+        try:
+            # Return class
+            return globals()[class_name]()
+        except KeyError:
+            raise NotImplementedError(f"{name} is not implemented.")
+    else:
+        raise ValueError(f"{name} is mispelt.")
+
+
+class Metric(ABC):
+    """Base class for all metrics."""
+
+    @abstractmethod
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        """
+        Calculate metric.
+
+        Parameters
+        ----------
+        truth : ndarray
+            Grouth truth values.
+        pred : ndarray
+            Predicted values.
+
+        Returns
+        -------
+        float
+            Real number representing the metric value.
+
+        Raises
+        ------
+        To be implemented.
+        """
+        ...
+
+
+class MeanSquaredError(Metric):
+    """Mean Squared Error metric implementation for regression."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray):
+        return np.mean((truth - pred) ** 2)
+
+
+class Accuracy(Metric):
+    """Accuracy metric implementation for classification."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray):
+        return np.mean(truth == pred)
