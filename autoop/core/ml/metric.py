@@ -82,6 +82,3 @@ class Accuracy(Metric):
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray):
         return np.mean(truth == pred)
-
-
-mse: Metric = get_metric("mean_squared_error")
