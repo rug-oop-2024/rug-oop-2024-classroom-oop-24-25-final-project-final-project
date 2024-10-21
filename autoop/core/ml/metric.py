@@ -4,8 +4,14 @@ from typing import Any
 import numpy as np
 
 METRICS = [
+    # Regression
     "mean_squared_error",
+    "mean_absolute_error",
+    "r_squared",
+    # Classification
     "accuracy",
+    "f1",
+    "log_loss"
 ]
 
 
@@ -32,14 +38,15 @@ def get_metric(name: str) -> "Metric":
     """
     if name in METRICS:
         # Parse string to match the class name.
-        class_name = ''.join(word.capitalize() for word in name.split('_'))
+        class_name: str = \
+            ''.join(word.capitalize() for word in name.split('_'))
         try:
             # Return class
             return globals()[class_name]()
-        except KeyError:
-            raise NotImplementedError(f"{name} is not implemented.")
+        except TypeError:
+            raise NotImplementedError(f"{class_name} is not implemented.")
     else:
-        raise ValueError(f"{name} is mispelt.")
+        raise ValueError(f"{class_name} is possibly mispelt.")
 
 
 class Metric(ABC):
@@ -61,14 +68,11 @@ class Metric(ABC):
         -------
         float
             Real number representing the metric value.
-
-        Raises
-        ------
-        To be implemented.
         """
         ...
 
 
+# region Regression
 class MeanSquaredError(Metric):
     """Mean Squared Error metric implementation for regression."""
 
@@ -76,8 +80,52 @@ class MeanSquaredError(Metric):
         return np.mean((truth - pred) ** 2)
 
 
+class MeanAbsoluteError(Metric):
+    """Mean Absolute Error (MAE) metric implementation for regression."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        return np.mean(np.abs(truth - pred))
+
+
+class RSquared(Metric):
+    """R-Squared (R^2) metric implementation for regression."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        sum_squares = np.sum((truth - pred) ** 2)
+        sum_total = np.sum((truth - np.mean(truth)) ** 2)
+
+        return 1 - (sum_squares / sum_total)
+# endregion
+
+
+# region Classification
 class Accuracy(Metric):
     """Accuracy metric implementation for classification."""
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray):
         return np.mean(truth == pred)
+
+
+class F1(Metric):
+    """F1 metric implementation for classification."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        true_pos = np.sum((truth == 1) & (pred == 1))
+        false_pos = np.sum((truth == 0) & (pred == 1))
+        false_neg = np.sum((truth == 1) & (pred == 0))
+        precision = true_pos / (true_pos + false_pos)
+        recall = true_pos / (true_pos + false_neg)
+
+        return (2 * precision * recall) / (precision + recall)
+
+
+class LogLoss(Metric):
+    """Logarithmic Loss implemenation for classication."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        # Prevent taking log of 0 by clipping the array
+        pred_clipped = np.clip(pred, 1e-15, 1 - 1e-15)
+
+        return -np.mean(truth * np.log(pred_clipped) + (1 - truth) *
+                        np.log(1 - pred_clipped))
+# endregion
