@@ -38,7 +38,8 @@ def get_metric(name: str) -> "Metric":
     """
     if name in METRICS:
         # Parse string to match the class name.
-        class_name = ''.join(word.capitalize() for word in name.split('_'))
+        class_name: str = \
+            ''.join(word.capitalize() for word in name.split('_'))
         try:
             # Return class
             return globals()[class_name]()
@@ -67,10 +68,6 @@ class Metric(ABC):
         -------
         float
             Real number representing the metric value.
-
-        Raises
-        ------
-        To be implemented.
         """
         ...
 
@@ -84,13 +81,20 @@ class MeanSquaredError(Metric):
 
 
 class MeanAbsoluteError(Metric):
-    """Mean Absolute Error metric implementation for regression."""
-    ...
+    """Mean Absolute Error (MAE) metric implementation for regression."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        return np.mean(np.abs(truth - pred))
 
 
 class RSquared(Metric):
-    """R-Squared metric implementation for regression."""
-    ...
+    """R-Squared (R^2) metric implementation for regression."""
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        sum_squares = np.sum((truth - pred) ** 2)
+        sum_total = np.sum((truth - np.mean(truth)) ** 2)
+
+        return 1 - (sum_squares / sum_total)
 # endregion
 
 
@@ -104,10 +108,24 @@ class Accuracy(Metric):
 
 class F1(Metric):
     """F1 metric implementation for classification."""
-    ...
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        true_pos = np.sum((truth == 1) & (pred == 1))
+        false_pos = np.sum((truth == 0) & (pred == 1))
+        false_neg = np.sum((truth == 1) & (pred == 0))
+        precision = true_pos / (true_pos + false_pos)
+        recall = true_pos / (true_pos + false_neg)
+
+        return (2 * precision * recall) / (precision + recall)
 
 
 class LogLoss(Metric):
     """Logarithmic Loss implemenation for classication."""
-    ...
+
+    def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
+        # Prevent taking log of 0 by clipping the array
+        pred_clipped = np.clip(pred, 1e-15, 1 - 1e-15)
+
+        return -np.mean(truth * np.log(pred_clipped) + (1 - truth) *
+                        np.log(1 - pred_clipped))
 # endregion
