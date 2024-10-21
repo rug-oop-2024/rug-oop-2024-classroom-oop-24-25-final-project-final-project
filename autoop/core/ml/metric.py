@@ -4,8 +4,14 @@ from typing import Any
 import numpy as np
 
 METRICS = [
+    # Regression
     "mean_squared_error",
+    "mean_absolute_error",
+    "r_squared",
+    # Classification
     "accuracy",
+    "f1",
+    "log_loss"
 ]
 
 
@@ -36,10 +42,10 @@ def get_metric(name: str) -> "Metric":
         try:
             # Return class
             return globals()[class_name]()
-        except KeyError:
-            raise NotImplementedError(f"{name} is not implemented.")
+        except TypeError:
+            raise NotImplementedError(f"{class_name} is not implemented.")
     else:
-        raise ValueError(f"{name} is mispelt.")
+        raise ValueError(f"{class_name} is possibly mispelt.")
 
 
 class Metric(ABC):
@@ -69,6 +75,7 @@ class Metric(ABC):
         ...
 
 
+# region Regression
 class MeanSquaredError(Metric):
     """Mean Squared Error metric implementation for regression."""
 
@@ -76,8 +83,31 @@ class MeanSquaredError(Metric):
         return np.mean((truth - pred) ** 2)
 
 
+class MeanAbsoluteError(Metric):
+    """Mean Absolute Error metric implementation for regression."""
+    ...
+
+
+class RSquared(Metric):
+    """R-Squared metric implementation for regression."""
+    ...
+# endregion
+
+
+# region Classification
 class Accuracy(Metric):
     """Accuracy metric implementation for classification."""
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray):
         return np.mean(truth == pred)
+
+
+class F1(Metric):
+    """F1 metric implementation for classification."""
+    ...
+
+
+class LogLoss(Metric):
+    """Logarithmic Loss implemenation for classication."""
+    ...
+# endregion
