@@ -16,13 +16,13 @@ st.set_page_config(page_title="Datasets")
 
 st.title("Dataset")
 
-new_dataset = st.file_uploader(label="Upload dataset(csv)",
-                               accept_multiple_files=False,
-                               type=["csv"])
+uploaded_file = st.file_uploader(label="Upload dataset(csv)",
+                                 accept_multiple_files=False,
+                                 type=["csv"])
 
-if new_dataset is not None:
-    st.write("shit💩")
-    create()
+if uploaded_file is not None:
+    new_dataset = create(uploaded_file)
+    st.dataframe(new_dataset.read())
 else:
     view_dataset = st.selectbox("select dataset", dataset_names)
 
