@@ -162,8 +162,8 @@ If you did not implement the feature
 | `ML/model`                            | NF           |Marcus Persson        |         | |
 | `ML/model/extensions`                 | FN           |Marcus Persson        |         | |
 | `ML/pipeline/evaluation`              | FN           |Marcus Persson        |         | | 
-| `ST/page/datasets`                    | NF           |Jia Hao Zhang         |         | |
-| `ST/datasets/management/create`       | FN           |                      |         | |
+| `ST/page/datasets`                    | NF           |Jia Hao Zhang         |X        |skeleton page layout made.|
+| `ST/datasets/management/create`       | FN           |Jia Hao Zhang         |X        |it does create new dataset fro now. needs more testing and seeing how to do it properly later.|
 | `ST/datasets/management/save`         | FN           |                      |         | |
 | `ST/page/modelling`                   | NF           |                      |         | |
 | `ST/modelling/datasets/list`          | FN           |                      |         | |
