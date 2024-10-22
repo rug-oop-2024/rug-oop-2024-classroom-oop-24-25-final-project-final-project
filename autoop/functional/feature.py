@@ -12,7 +12,6 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
     """
     features = []
 
-    # Use the read() method to get the pandas DataFrame from the Dataset
     df: pd.DataFrame = dataset.read()
 
     for column in df.columns:
@@ -21,7 +20,6 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
         else:
             feature_type = 'categorical'
 
-        # Create a Feature object for this column and add it to the list
         feature = Feature(name=column, type=feature_type)
         features.append(feature)
 

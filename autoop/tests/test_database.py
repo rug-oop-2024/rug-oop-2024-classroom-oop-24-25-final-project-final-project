@@ -2,7 +2,6 @@ import unittest
 import sys
 import os
 
-# Add the root directory of the project to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from autoop.core.database import Database
 from autoop.core.storage import LocalStorage
