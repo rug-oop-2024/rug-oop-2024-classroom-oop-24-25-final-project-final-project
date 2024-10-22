@@ -15,7 +15,7 @@ class Artifact(BaseModel):
     """
     name: str = Field()
     asset_path: str = Field(default=None)
-    data: bytes = Field()
+    data: bytes = Field(default=None)
     version: str = Field(default="1.0.0")
     type: str = Field(default=None)
     metadata: dict = Field(default={"experiment_id": None,
