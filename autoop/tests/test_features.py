@@ -2,6 +2,13 @@ import unittest
 from sklearn.datasets import load_iris, fetch_openml
 import pandas as pd
 
+import sys
+import os
+
+# Add the root directory of the project to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
+# Now the imports should work
 from autoop.core.ml.dataset import Dataset
 from autoop.core.ml.feature import Feature
 from autoop.functional.feature import detect_feature_types
@@ -70,3 +77,6 @@ class TestFeatures(unittest.TestCase):
             self.assertEqual(detected_feature.type, "numerical")
         for detected_feature in filter(lambda x: x.name in categorical_columns, features):
             self.assertEqual(detected_feature.type, "categorical")
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
