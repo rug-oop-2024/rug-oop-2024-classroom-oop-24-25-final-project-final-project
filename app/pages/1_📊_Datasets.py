@@ -8,17 +8,11 @@ from autoop.core.ml.dataset import Dataset
 automl = AutoMLSystem.get_instance()
 
 datasets = automl.registry.list(type="dataset")
+dataset_names = [_.name for _ in datasets]
 
 # your code here
 
-datasets_display_dat = pd.DataFrame({"Datasets": [art.name for
-                                                  art in datasets],
-                                     "versions": [dataset.version for
-                                                  dataset in datasets]}
-                                    )
-
-st.set_page_config(page_title="Datasets"
-                   )
+st.set_page_config(page_title="Datasets")
 
 st.title("Dataset")
 
@@ -28,8 +22,11 @@ new_dataset = st.file_uploader(label="Upload dataset(csv)",
 
 if new_dataset is not None:
     st.write("shit💩")
+    create()
+else:
+    view_dataset = st.selectbox("select dataset", dataset_names)
 
-st.dataframe(datasets_display_dat,
-             column_config={"Datasets": "Name datasets", "versions": "version"},
-             hide_index=True
-             )
+    if view_dataset is not None:
+        st.dataframe(
+            pd.read_csv(datasets[dataset_names.index(view_dataset)].asset_path)
+            )
