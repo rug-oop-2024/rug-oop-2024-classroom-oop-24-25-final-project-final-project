@@ -10,7 +10,7 @@ METRICS = [
     "r_squared",
     # Classification
     "accuracy",
-    "f1",
+    "precision",
     "log_loss"
 ]
 
@@ -106,17 +106,14 @@ class Accuracy(Metric):
         return np.mean(truth == pred)
 
 
-class F1(Metric):
-    """F1 metric implementation for classification."""
+class Precision(Metric):
+    """Precision metric implementation for classification."""
 
     def __call__(self, truth: np.ndarray, pred: np.ndarray) -> float:
         true_pos = np.sum((truth == 1) & (pred == 1))
         false_pos = np.sum((truth == 0) & (pred == 1))
-        false_neg = np.sum((truth == 1) & (pred == 0))
-        precision = true_pos / (true_pos + false_pos)
-        recall = true_pos / (true_pos + false_neg)
 
-        return (2 * precision * recall) / (precision + recall)
+        return true_pos / (true_pos + false_pos)
 
 
 class LogLoss(Metric):
