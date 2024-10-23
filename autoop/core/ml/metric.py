@@ -99,7 +99,7 @@ class Recall(Metric):
 
     def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ SKlearn wrapper for the recall score """
-        return recall_score(y_true, y_pred)
+        return recall_score(y_true, y_pred, average="weighted")
 
 
 class Precision(Metric):
@@ -111,7 +111,7 @@ class Precision(Metric):
 
     def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ SKlearn wrapper for the precision score """
-        return precision_score(y_true, y_pred)
+        return precision_score(y_true, y_pred, average="weighted")
 
 
 class F1(Metric):
@@ -123,7 +123,7 @@ class F1(Metric):
 
     def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ SKlearn wrapper for the f1 score """
-        return f1_score(y_true, y_pred)
+        return f1_score(y_true, y_pred, average="weighted")
 
 
 METRICS = [
@@ -150,20 +150,11 @@ METRICS_DICT = {
 def get_metric(name: str) -> Metric:
     # Factory function to get a metric by name.
     if name not in METRICS:
-        print(f"Metric {name} not implemented.")
+        print(f"Metric {name} is not yet implemented.")
         return None
     # create a class instance of the same name and return it
     metric = METRICS_DICT[name]()
-    print("Initializing metric- ", Metric)
+    print("Initializing metric- ", metric)
     print("!!!Note that this metric should only be used for",
           f"{metric.task_type} tasks!!!")
     return metric
-
-
-if __name__ == "__main__":
-    # generate fake data for testing
-    labels = np.ndarray([2, 1, 0])
-    predictions = np.ndarray([1, 1, 0])
-    metric = get_metric("F1")
-    print(metric(labels, predictions))
-    fake_metric = get_metric("fake")
