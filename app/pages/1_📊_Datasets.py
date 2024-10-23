@@ -21,7 +21,10 @@ uploaded_file = st.file_uploader(label="Upload dataset(csv)",
                                  type=["csv"])
 
 if uploaded_file is not None:
-    new_dataset = create(uploaded_file)
+    new_dataset: Dataset = create(uploaded_file)
+
+    save = st.button("save dataset?")
+
     st.dataframe(new_dataset.read())
 else:
     view_dataset = st.selectbox("select dataset", dataset_names)
