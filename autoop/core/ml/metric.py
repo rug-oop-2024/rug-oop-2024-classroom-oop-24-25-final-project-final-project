@@ -31,6 +31,7 @@ class Metric(ABC):
                                                     y_pred, np.ndarray):
             raise ValueError("both y_true and y_pred must be numpy arrays")
         if y_true.shape != y_pred.shape:
+            print(y_true.shape, y_pred.shape)
             raise ValueError("y_true and y_pred must have the same size")
         return self.calculate(y_true, y_pred)
 
@@ -125,7 +126,17 @@ class F1(Metric):
         return f1_score(y_true, y_pred)
 
 
-METRICS = {
+METRICS = [
+    "MSE",
+    "RMSE",
+    "R2",
+    "Accuracy",
+    "Recall",
+    "Precision",
+    "F1"
+]  # add the names (in strings) of the metrics you implement
+
+METRICS_DICT = {
     "MSE": MSE,
     "RMSE": RMSE,
     "R2": R2,
@@ -133,22 +144,26 @@ METRICS = {
     "Recall": Recall,
     "Precision": Precision,
     "F1": F1,
-}  # add the names (in strings) of the metrics you implement
+}  # Mapping from name to class
 
 
 def get_metric(name: str) -> Metric:
     # Factory function to get a metric by name.
-    if name not in METRICS.keys():
+    if name not in METRICS:
         print(f"Metric {name} not implemented.")
         return None
     # create a class instance of the same name and return it
-    Metric = METRICS[name]()
+    metric = METRICS_DICT[name]()
     print("Initializing metric- ", Metric)
     print("!!!Note that this metric should only be used for",
-          f"{Metric.task_type} tasks!!!")
-    return Metric
+          f"{metric.task_type} tasks!!!")
+    return metric
 
 
 if __name__ == "__main__":
+    # generate fake data for testing
+    labels = np.ndarray([2, 1, 0])
+    predictions = np.ndarray([1, 1, 0])
     metric = get_metric("F1")
+    print(metric(labels, predictions))
     fake_metric = get_metric("fake")
