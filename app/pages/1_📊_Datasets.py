@@ -3,6 +3,7 @@ import pandas as pd
 
 from app.core.system import AutoMLSystem
 from app.datasets.management.create import create
+from app.datasets.management.save import save
 from autoop.core.ml.dataset import Dataset
 
 automl = AutoMLSystem.get_instance()
@@ -23,7 +24,13 @@ uploaded_file = st.file_uploader(label="Upload dataset(csv)",
 if uploaded_file is not None:
     new_dataset: Dataset = create(uploaded_file)
 
-    save = st.button("save dataset?")
+    if st.button("save dataset?") is True:
+        save_confirmation = save(new_dataset)
+
+        if save_confirmation is True:
+            st.write("Save Comlete")
+
+    st.write("cancel upload to cancel saving.")
 
     st.dataframe(new_dataset.read())
 else:
