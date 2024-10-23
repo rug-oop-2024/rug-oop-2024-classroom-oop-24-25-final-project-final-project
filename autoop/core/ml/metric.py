@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from sklearn.metrics import recall_score, precision_score, f1_score
 import numpy as np
 
 #  get_metrics implemented at the end of the file (!)
 
 
 class Metric(ABC):
-    """Base class for all metrics. All metrics must implement calculate()"""
+    """Base class for all metrics. All metrics must implement _calculate()"""
     _name = None
     _description = None
     _task_type = None
@@ -17,7 +16,7 @@ class Metric(ABC):
                f", specified for {self._task_type}"
 
     @abstractmethod
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ Calculates the metric """
         pass
 
@@ -33,7 +32,7 @@ class Metric(ABC):
         if y_true.shape != y_pred.shape:
             print(y_true.shape, y_pred.shape)
             raise ValueError("y_true and y_pred must have the same size")
-        return self.calculate(y_true, y_pred)
+        return self._calculate(y_true, y_pred)
 
     @property
     def task_type(self):
@@ -48,7 +47,7 @@ class MSE(Metric):
         " the squared differences between the ground truth and the prediction"
     _task_type = "regression"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ Calculates the mean squared error """
         return np.mean((y_true - y_pred) ** 2)
 
@@ -60,7 +59,7 @@ class RMSE(Metric):
         " the squared differences between the ground truth and the prediction"
     _task_type = "regression"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ Calculates the root mean squared error """
         return np.sqrt(np.mean((y_true - y_pred) ** 2))
 
@@ -72,11 +71,11 @@ class R2(Metric):
         " goodness of fit of a linear model to the data"
     _task_type = "regression"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ Calculates the R2 score """
-        ss_res = np.sum((y_true - y_pred) ** 2)
-        ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
-        return 1 - ss_res / ss_tot
+        sum_s_res = np.sum((y_true - y_pred) ** 2)
+        sum_s_tot = np.sum((y_true - np.mean(y_true)) ** 2)
+        return 1 - sum_s_res / sum_s_tot
 
 
 class Accuracy(Metric):
@@ -85,7 +84,7 @@ class Accuracy(Metric):
     _description = "Calculates the percentage of correct predictions"
     _task_type = "classification"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """ Calculates the mean accuracy """
         return np.mean(y_true == y_pred)
 
@@ -97,9 +96,30 @@ class Recall(Metric):
         " predictions when compared to all true positive labels"
     _task_type = "classification"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """ SKlearn wrapper for the recall score """
-        return recall_score(y_true, y_pred, average="weighted")
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """ Apply multiclass recall calculation """
+        unique_classes = np.unique(y_true)
+        recall_scores, class_instances = [], []
+
+        for cls in unique_classes:
+            true_positive = np.sum((y_true == cls) & (y_pred == cls))
+            false_negative = np.sum((y_true == cls) & (y_pred != cls))
+            total_predictions = true_positive + false_negative
+
+            if total_predictions == 0:
+                recall = 0
+            else:
+                recall = true_positive / total_predictions
+
+            recall_scores.append(recall)
+            class_instances.append(np.sum(y_true == cls))
+
+        # Apply weighting (standard way of handling multiclass problems)
+        number_of_predictions = len(y_pred)
+        weighted_recall = np.sum(np.array(recall_scores) *
+                                 np.array(class_instances)
+                                 ) / number_of_predictions
+        return weighted_recall
 
 
 class Precision(Metric):
@@ -109,9 +129,32 @@ class Precision(Metric):
         " predictions when compared to all predicted positive labels"
     _task_type = "classification"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """ SKlearn wrapper for the precision score """
-        return precision_score(y_true, y_pred, average="weighted")
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """ Apply multiclass precision calculation """
+        all_classes = np.unique(y_true)
+        precision_scores, class_instances = [], []
+
+        for class_ in all_classes:
+            true_positives = np.sum((y_true == class_) & (y_pred == class_))
+            false_positives = np.sum((y_true != class_) & (y_pred == class_))
+            total_predictions = true_positives + false_positives
+
+            if total_predictions == 0:
+                print("Precision is ill-defined for classes with no",
+                      "predictions. setting precision to 0")
+                precision = 0
+            else:
+                precision = true_positives / total_predictions
+
+            precision_scores.append(precision)
+            class_instances.append(np.sum(y_true == class_))
+
+        # Apply weighting (standard way of handling multiclass problems)
+        number_of_predictions = len(y_pred)
+        weighted_precision = np.sum(np.array(precision_scores) *
+                                    np.array(class_instances)
+                                    ) / number_of_predictions
+        return weighted_precision
 
 
 class F1(Metric):
@@ -121,9 +164,17 @@ class F1(Metric):
         " harmonic mean of precision and recall"
     _task_type = "classification"
 
-    def calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """ SKlearn wrapper for the f1 score """
-        return f1_score(y_true, y_pred, average="weighted")
+    def _calculate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """ Apply multiclass F1-score calculation """
+        helper_class_recall = Recall()
+        helper_class_precision = Precision()
+        recall = helper_class_recall(y_true, y_pred)
+        precision = helper_class_precision(y_true, y_pred)
+        if precision == 0 and recall == 0:
+            f1 = 0
+        else:
+            f1 = 2 * (precision * recall) / (precision + recall)
+        return f1
 
 
 METRICS = [
