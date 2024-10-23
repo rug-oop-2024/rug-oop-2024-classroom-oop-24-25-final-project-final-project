@@ -124,9 +124,8 @@ Pipeline(
         self._split_data()
         self._train()
 
-        # Evaluate on both the training and test sets
-        self._evaluate_on_training_set()  # Evaluate on training set
-        self._evaluate()  # Evaluate on test set
+        self._evaluate_on_training_set()
+        self._evaluate()
 
         return {
             "train_metrics": self._train_metrics_results,

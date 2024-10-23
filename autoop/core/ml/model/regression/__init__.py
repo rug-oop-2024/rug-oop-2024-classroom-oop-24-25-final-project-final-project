@@ -1,2 +1,2 @@
 
-from autoop.core.ml.model.regression.regression import MultipleLinearRegression, Lasso, PolynomialRegression
+from autoop.core.ml.model.regression.regression import MultipleLinearRegression, Lasso, SklearnSVR

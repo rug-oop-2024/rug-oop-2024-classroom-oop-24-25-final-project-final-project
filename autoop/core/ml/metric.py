@@ -6,11 +6,10 @@ import numpy as np
 METRICS = [
     "mean_squared_error",
     "accuracy",
-    "precision",
-    "recall",
-    "f1_score",
+    "cohens_kappa",
     "mean_absolute_error",
-    "r2"
+    "r2",
+    "MCC"
 ]
 
 def get_metric(name: str):
@@ -19,16 +18,14 @@ def get_metric(name: str):
         return MeanSquaredError()
     elif name == "accuracy":
         return Accuracy()
-    elif name == "precision":
-        return Precision()
-    elif name == "recall":
-        return Recall()
-    elif name == "f1_score":
-        return F1Score()
     elif name == "mean_absolute_error":
         return MeanAbsoluteError()
     elif name == "r2":
         return R2()
+    elif name == "cohens_kappa":
+        return CohensKappa()
+    elif name == "MCC":
+        return MCC()
     else:
         raise ValueError(f"Metric {name} is not supported. Available metrics: {METRICS}")
 
@@ -38,7 +35,6 @@ class Metric(ABC):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         pass
 
-# Concrete Metric Implementations
 
 class MeanSquaredError(Metric):
 
@@ -53,35 +49,33 @@ class Accuracy(Metric):
         accuracy = correct_predictions / len(y_true)
         return accuracy
 
-class Precision(Metric):
 
+class CohensKappa(Metric):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        true_positives = np.sum((y_true == 1) & (y_pred == 1))
-        predicted_positives = np.sum(y_pred == 1)
-        if predicted_positives == 0:
-            return 0.0
-        precision = true_positives / predicted_positives
-        return precision
+        total = len(y_true)
+        observed_agreement = np.sum(y_true == y_pred) / total
 
-class Recall(Metric):
+        class_counts = np.bincount(y_true)
+        pred_counts = np.bincount(y_pred)
+        expected_agreement = np.sum((class_counts / total) * (pred_counts / total))
 
+        kappa = (observed_agreement - expected_agreement) / (1 - expected_agreement)
+        return kappa
+
+class MCC(Metric):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        true_positives = np.sum((y_true == 1) & (y_pred == 1))
-        actual_positives = np.sum(y_true == 1)
-        if actual_positives == 0:
-            return 0.0
-        recall = true_positives / actual_positives
-        return recall
+        TP = np.sum((y_true == 1) & (y_pred == 1))
+        TN = np.sum((y_true == 0) & (y_pred == 0))
+        FP = np.sum((y_true == 0) & (y_pred == 1))
+        FN = np.sum((y_true == 1) & (y_pred == 0))
 
-class F1Score(Metric):
+        numerator = (TP * TN) - (FP * FN)
+        denominator = np.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
 
-    def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        precision = Precision()(y_true, y_pred)
-        recall = Recall()(y_true, y_pred)
-        if precision + recall == 0:
+        if denominator == 0:
             return 0.0
-        f1 = 2 * (precision * recall) / (precision + recall)
-        return f1
+        return numerator / denominator
+
 
 class MeanAbsoluteError(Metric):
 
@@ -116,11 +110,10 @@ y_true_class = np.array([1, 0, 1, 1])
 y_pred_class = np.array([1, 0, 0, 1])
 
 accuracy_metric = get_metric("accuracy")
-precision_metric = get_metric("precision")
-recall_metric = get_metric("recall")
-f1_metric = get_metric("f1_score")
+kappa_metric = get_metric("cohens_kappa")
+mcc_metric = get_metric("MCC")
+
 
 print(f"Accuracy: {accuracy_metric(y_true_class, y_pred_class)}")
-print(f"Precision: {precision_metric(y_true_class, y_pred_class)}")
-print(f"Recall: {recall_metric(y_true_class, y_pred_class)}")
-print(f"F1 Score: {f1_metric(y_true_class, y_pred_class)}")
+print(f"CohensKappa: {kappa_metric(y_true_class, y_pred_class)}")
+print(f"MCC: {mcc_metric(y_true_class, y_pred_class)}")

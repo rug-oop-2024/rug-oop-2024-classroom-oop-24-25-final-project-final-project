@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 import numpy as np
 from autoop.core.ml.model.model import Model
 from sklearn.linear_model import Lasso as SklearnLasso
+from sklearn.svm import SVR as SklearnSVR
 
 class MultipleLinearRegression(Model):
 
@@ -42,28 +43,25 @@ class Lasso(Model):
         return self.model.predict(X)
 
 
-class PolynomialRegression(Model):
 
-    def __init__(self, degree=2, **kwargs):
-        super().__init__(name="Polynomial Regression", model_type="regression", **kwargs)
-        self.degree = degree
-        self.parameters = None
+class SupportVectorRegression(Model):
+    def __init__(self, kernel='rbf', **kwargs):
+        super().__init__(name="Support Vector Regression", model_type="regression", **kwargs)
 
-    def _polynomial_features(self, X):
-        X_poly = X
-        for d in range(2, self.degree + 1):
-            X_poly = np.c_[X_poly, X ** d]
-        return X_poly
+        self.model = SklearnSVR(kernel=kernel)
 
     def fit(self, X: np.ndarray, y: np.ndarray):
-        X_poly = self._polynomial_features(X)
-        X_b = np.c_[np.ones((X_poly.shape[0], 1)), X_poly]
-        self.parameters = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y)
+        """Fit the SVR model."""
+        self.model.fit(X, y)
+        self.parameters = {
+            "kernel": self.model.kernel,
+            "support_vectors_": self.model.support_,
+        }
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        X_poly = self._polynomial_features(X)
-        X_b = np.c_[np.ones((X_poly.shape[0], 1)), X_poly]
-        return X_b.dot(self.parameters)
+        """Predict using the SVR model."""
+        return self.model.predict(X)
+
 
 
 if __name__ == "__main__":
@@ -78,13 +76,17 @@ if __name__ == "__main__":
     mlr_predictions = mlr_model.predict(X_test_reg)
     print(f"MLR Predictions: {mlr_predictions}")
 
-    lasso_model = Lasso(alpha=0.1, asset_path="models/lasso_model", version="1.0.0")
+    lasso_model = Lasso(asset_path="models/lasso_model", version="1.0.0")
     lasso_model.fit(X_train_reg, y_train_reg)
     lasso_predictions = lasso_model.predict(X_test_reg)
     print(f"Lasso Predictions: {lasso_predictions}")
 
-    pol_model = PolynomialRegression(asset_path="models/lasso_model", version="1.0.0")
-    pol_model.fit(X_train_reg, y_train_reg)
-    polynomial_predictions = pol_model.predict(X_test_reg)
-    print(f"Polynomial Predictions: {polynomial_predictions}")
+    X_train_reg = np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]])
+    y_train_reg = np.array([0, 1, 2, 1, 0])
+    X_test_reg = np.array([[3, 4], [1, 2]])
+
+    svr_model = SupportVectorRegression(asset_path="models/lasso_model", version="1.0.0")
+    svr_model.fit(X_train_reg, y_train_reg)
+    svr_predictions = svr_model.predict(X_test_reg)
+    print(f"SVR: {svr_predictions}")
 
