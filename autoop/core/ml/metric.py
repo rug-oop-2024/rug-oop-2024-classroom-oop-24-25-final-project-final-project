@@ -40,7 +40,7 @@ class Metric(ABC):
         return self._task_type
 
 
-class MSE(Metric):
+class MeanSquaredError(Metric):
     """ Implements the Mean Squared Error metric"""
     _name = "Mean Squared Error"
     _description = "Calculates the average of all" + \
@@ -52,7 +52,7 @@ class MSE(Metric):
         return np.mean((y_true - y_pred) ** 2)
 
 
-class RMSE(Metric):
+class RootMeanSquaredError(Metric):
     """ Implements the Root Mean Squared Error metric"""
     _name = "Root Mean Squared Error"
     _description = "Calculates the root of the average of all" + \
@@ -188,8 +188,8 @@ METRICS = [
 ]  # add the names (in strings) of the metrics you implement
 
 METRICS_DICT = {
-    "MSE": MSE,
-    "RMSE": RMSE,
+    "MSE": MeanSquaredError,
+    "RMSE": RootMeanSquaredError,
     "R2": R2,
     "Accuracy": Accuracy,
     "Recall": Recall,
