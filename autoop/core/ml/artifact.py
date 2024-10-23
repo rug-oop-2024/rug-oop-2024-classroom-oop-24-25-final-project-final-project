@@ -13,7 +13,7 @@ class Artifact(BaseModel):
         metadata (dict): dictionary with experiment and run id.
         tags (list): list of tags for the artifact.
     """
-    name: str = Field()
+    name: str = Field(default=None)
     asset_path: str = Field(default=None)
     data: bytes = Field(default=None)
     version: str = Field(default="1.0.0")
