@@ -59,7 +59,7 @@ if datasets:
         st.write(f"Type: {ds.type}")
         st.write(f"Tags: {', '.join(ds.tags)}")
 
-        if st.button(f"Preview {ds.name}", key=f"preview_{ds.id}"):
+        if st.checkbox(f"Preview {ds.name}", key=f"preview_{ds.id}"):
             df = ds.read()
             st.write(df)
 
