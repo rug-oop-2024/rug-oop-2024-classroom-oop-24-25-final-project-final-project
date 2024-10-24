@@ -7,12 +7,11 @@ from app.datasets.management.save import save
 from autoop.core.ml.dataset import Dataset
 from copy import deepcopy
 
+# your code here
 automl = AutoMLSystem.get_instance()
 
 datasets = automl.registry.list(type="dataset")
 dataset_names = [_.name for _ in datasets]
-
-# your code here
 
 st.set_page_config(page_title="Datasets")
 
@@ -29,7 +28,12 @@ if uploaded_file is not None:
     if (
         st.button("save dataset?") and
             (version == "" or len(version.split(".")) == 3)):
-        new_dataset = create(deepcopy(uploaded_file), version)
+        new_dataset: Dataset = create(deepcopy(uploaded_file), version)
+
+        confirm_save = save(new_dataset)
+
+        if confirm_save:
+            st.warning("save complete")
 
     st.write("cancel upload to go back.")
 

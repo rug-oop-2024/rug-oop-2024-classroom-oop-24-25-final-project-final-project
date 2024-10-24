@@ -1,7 +1,8 @@
 from autoop.core.ml.dataset import Dataset
+from app.core.system import AutoMLSystem
 
 
-def save(datset: Dataset) -> bool:
+def save(dataset: Dataset) -> bool:
     """
     Save the uploaded dataset.
 
@@ -11,4 +12,6 @@ def save(datset: Dataset) -> bool:
     returns:
         bool: if the saving was succesfull or not.
     """
+    automl = AutoMLSystem.get_instance()
+    automl.registry.register(dataset)
     return True

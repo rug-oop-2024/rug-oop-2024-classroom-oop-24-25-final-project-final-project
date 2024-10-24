@@ -24,3 +24,7 @@ class Artifact(BaseModel):
 
     def read(self) -> bytes:
         return self.data
+
+    @property
+    def id(self) -> str:
+        return str(base64.b64encode(self.asset_path)) + self.version
