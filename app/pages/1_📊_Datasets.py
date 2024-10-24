@@ -6,6 +6,7 @@ from app.datasets.management.create import create
 from app.datasets.management.save import save
 from autoop.core.ml.dataset import Dataset
 from copy import deepcopy
+from base64 import b64decode
 
 # your code here
 automl = AutoMLSystem.get_instance()
@@ -29,7 +30,6 @@ if uploaded_file is not None:
         st.button("save dataset?") and
             (version == "" or len(version.split(".")) == 3)):
         new_dataset: Dataset = create(deepcopy(uploaded_file), version)
-
         confirm_save = save(new_dataset)
 
         if confirm_save:
@@ -43,5 +43,6 @@ else:
 
     if view_dataset is not None:
         st.dataframe(
-            pd.read_csv(datasets[dataset_names.index(view_dataset)].asset_path)
+            pd.read_csv(
+                datasets[dataset_names.index(view_dataset)].asset_path)
             )

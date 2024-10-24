@@ -27,4 +27,10 @@ class Artifact(BaseModel):
 
     @property
     def id(self) -> str:
-        return str(base64.b64encode(self.asset_path)) + self.version
+        """
+        Id of the artifact.
+
+        returns:
+            id (str): str id of the artifact.
+        """
+        return f"{base64.b64encode(self.asset_path.encode())}:{self.version}"
