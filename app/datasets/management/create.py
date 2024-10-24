@@ -21,7 +21,7 @@ def create(file: IO, version: str) -> Dataset:
             asset_path=f"1.0.0{file.name}")
     else:
         dataset = Dataset.from_dataframe(
-            pd.read_cv(file),
+            pd.read_csv(file),
             file.name,
             asset_path=f"{version}{file.name}",
             version=version)
