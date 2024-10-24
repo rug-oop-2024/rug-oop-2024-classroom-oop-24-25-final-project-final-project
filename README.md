@@ -164,7 +164,7 @@ If you did not implement the feature
 |`ML/pipeline/evaluation`               |FN            |Marcus Persson        |         | | 
 | `ST/page/datasets`                    |NF            |Jia Hao Zhang         |X        |skeleton page layout made.|
 | `ST/datasets/management/create`       |FN            |Jia Hao Zhang         |X        |it does create new dataset fro now. needs more testing and seeing how to do it properly later.|
-|`ST/datasets/management/save`          |FN            |Jia Hao Zhang         |         | |
+|`ST/datasets/management/save`          |FN            |Jia Hao Zhang         |x        |It saves the dataset. no idea if it properly done. now just need to revisit datasets page to see if it is readable. |
 |`ST/page/modelling`                    |NF            |                      |         | |
 |`ST/modelling/datasets/list`           |FN            |                      |         | |
 |`ST/modelling/datasets/features`       |FN            |                      |         | |

@@ -13,7 +13,7 @@ class Artifact(BaseModel):
         metadata (dict): dictionary with experiment and run id.
         tags (list): list of tags for the artifact.
     """
-    name: str = Field()
+    name: str = Field(default=None)
     asset_path: str = Field(default=None)
     data: bytes = Field(default=None)
     version: str = Field(default="1.0.0")
@@ -24,3 +24,13 @@ class Artifact(BaseModel):
 
     def read(self) -> bytes:
         return self.data
+
+    @property
+    def id(self) -> str:
+        """
+        Id of the artifact.
+
+        returns:
+            id (str): str id of the artifact.
+        """
+        return f"{base64.b64encode(self.asset_path.encode())}:{self.version}"
