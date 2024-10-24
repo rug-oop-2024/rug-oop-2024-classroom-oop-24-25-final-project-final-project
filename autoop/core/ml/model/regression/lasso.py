@@ -1,5 +1,4 @@
 import numpy as np
-from pydantic import PrivateAttr
 from sklearn.linear_model import Lasso as WrappedLasso
 from copy import deepcopy
 
@@ -14,8 +13,25 @@ from model import Model  # noqa : E402
 
 
 class Lasso(Model):
+    """ Lasso regression model class. """
+    def __init__(self, alpha: float = 1.0) -> None:
+        """
+        Initialize the Lasso model with various hyperparameters,
+        as defined in the scikit-learn library.
+        :param alpha: Regularization strength
+        """
+        alpha = self.validate_alpha(alpha)
+        self._model = WrappedLasso(alpha=alpha)
+        super().__init__()
 
-    _model: WrappedLasso = PrivateAttr(default_factory=WrappedLasso)
+    def validate_alpha(self, alpha: float) -> float:
+        """
+        Validate the regularization strength
+        """
+        if alpha < 0.0:
+            print("Regularization strength must be positive.",
+                  "Setting to default value 1.0")
+        return max(0, alpha)
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """

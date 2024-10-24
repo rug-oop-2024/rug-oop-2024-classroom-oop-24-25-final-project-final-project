@@ -1,13 +1,14 @@
-from autoop.core.ml.artifact import Artifact
 from abc import abstractmethod, ABC
 from copy import deepcopy
-from pydantic import BaseModel, PrivateAttr
+#from autoop.core.ml.artifact import Artifact
 
 import numpy as np
 
 
-class Model(BaseModel, ABC):
+class Model(ABC):
     """Base class for all models used in the assignment."""
+    def __init__(self):
+        self._parameters = {}
 
     @abstractmethod
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
@@ -20,10 +21,6 @@ class Model(BaseModel, ABC):
     def predict(self, observations: np.ndarray) -> np.ndarray:
         """Make predictions based on the observations."""
         pass
-
-    _parameters: dict = PrivateAttr(
-        default_factory=dict
-    )  # Force parameters to be private
 
     @property
     def parameters(self) -> dict:

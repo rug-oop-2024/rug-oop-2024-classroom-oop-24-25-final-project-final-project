@@ -1,4 +1,5 @@
 from sklearn.linear_model import LogisticRegression
+from typing import Literal
 from copy import deepcopy
 
 import numpy as np
@@ -13,15 +14,18 @@ from model import Model  # noqa : E402
 
 
 class MultipleLogisticRegressor(Model):
-    def __init__(self, penalty='l2', C=1.0):
+    """Logistic Regression model wrapper."""
+    def __init__(self, C: float = 1.0,
+                 penalty: Literal['l1', 'l2', 'elasticnet', 'none'] = 'l2'
+                 ) -> None:
         """
         Initialize the Logistic Regression model with various hyperparameters,
         as defined in the scikit-learn library.
-        :param penalty: Type of regularization ('l1', 'l2', 'elasticnet', or
-        'none')
+        :param penalty: Type of regularization
         :param C: Inverse of regularization strength
         """
         self._model = LogisticRegression(penalty=penalty, C=C)
+        super().__init__()
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """

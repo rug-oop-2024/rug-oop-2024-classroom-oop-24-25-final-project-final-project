@@ -14,6 +14,9 @@ class MultipleLinearRegression(Model):
     Class developed specifically for multiple linear regression, as
     specified in Question 2.
     """
+    def __init__(self) -> None:
+        """ Initialize the model. """
+        super().__init__()
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """
