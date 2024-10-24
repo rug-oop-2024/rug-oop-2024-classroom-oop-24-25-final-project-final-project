@@ -3,7 +3,7 @@ import pandas as pd
 
 from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
-
+from autoop.functional.feature import detect_feature_types
 
 st.set_page_config(page_title="Modelling", page_icon="📈")
 
@@ -17,5 +17,4 @@ automl = AutoMLSystem.get_instance()
 
 datasets = automl.registry.list(type="dataset")
 
-# your code here
 

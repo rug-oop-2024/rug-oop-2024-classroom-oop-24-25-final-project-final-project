@@ -1,11 +1,13 @@
 import base64
 
 class Artifact:
-    def __init__(self, asset_path: str = "some/path", version: str = "1.0.0", data: bytes = None, metadata: dict = None, **kwargs):
+    def __init__(self, name: str = "default.csv", asset_path: str = "some/path", version: str = "1.0.0", data: bytes = None, metadata: dict = None, tags: list = None, **kwargs):
+        self.name = name  # Add a name attribute
         self.asset_path = asset_path
         self.version = version
         self.data = data or b""
         self.metadata = metadata or {}
+        self.tags = tags or []  # Add a tags attribute
         self.type = kwargs.get('type', None)
 
     @property
@@ -26,7 +28,7 @@ class Artifact:
         self.metadata[key] = value
 
     def __repr__(self):
-        return f"Artifact(id={self.id}, asset_path={self.asset_path}, version={self.version}, type={self.type})"
+        return f"Artifact(id={self.id}, name={self.name}, asset_path={self.asset_path}, version={self.version}, type={self.type}, tags={self.tags})"
 
 '''
 artifact = Artifact(
