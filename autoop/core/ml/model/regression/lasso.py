@@ -13,7 +13,7 @@ from model import Model  # noqa : E402
 
 
 class Lasso(Model):
-    """ Lasso regression model class. """
+    """ Lasso regression model wrapper. """
     def __init__(self, alpha: float = 1.0) -> None:
         """
         Initialize the Lasso model with various hyperparameters,
