@@ -4,8 +4,8 @@ from typing import Dict, Tuple, List, Union
 
 from autoop.core.storage import Storage
 
-class Database():
 
+class Database():
     def __init__(self, storage: Storage):
         self._storage = storage
         self._data = {}

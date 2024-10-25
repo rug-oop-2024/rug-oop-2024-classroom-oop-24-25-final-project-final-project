@@ -1,15 +1,11 @@
 from pydantic import BaseModel, Field
 import pickle
 import base64
+import os
 
 
 class Artifact(BaseModel):
-    """
-    Artifact: an abstract object refering to an asset which is stored and
-    includes information about this specific asset (e.g., datasets, models,
-    pipeline outputs, etc.).
-
-    """
+    name: str = Field(title="Name of the asset")
     asset_path: str = Field(title="Path to the asset")
     version: str = Field(title="Version of the asset")
     data: bytes = Field(title="Data of the asset")
@@ -19,7 +15,7 @@ class Artifact(BaseModel):
 
     @property
     def id(self) -> str:
-        """
+        """ 
         Get the id of the artifact
         :returns: str: The id of the artifact
         """
@@ -31,15 +27,22 @@ class Artifact(BaseModel):
     # and with the right type 
     # how can this work as is done in the pipeline.py and dataset.py
     # and wtf is that lol just use csv files or a proper dataset
+
     def read(self) -> bytes:
         """ Read data from a given path """
         return self.data
 
-    def save(self, data: bytes) -> bytes:
-        """ Save the artifact to a given path """
+    def save(self) -> None:
+        """ 
+        Save the artifact's data to the specified asset path. 
+        Raises an exception if the directory does not exist.
+        """
+        os.makedirs(os.path.dirname(self.asset_path), exist_ok=True)
         with open(self.asset_path, 'wb') as file:
             file.write(self.data)
 
+
+    @classmethod
     def from_serializable(cls, name: str, data: object, version: str = "1.0.0", 
                           tags: list = None) -> 'Artifact':
         """ Create an artifact from a serializable object """
