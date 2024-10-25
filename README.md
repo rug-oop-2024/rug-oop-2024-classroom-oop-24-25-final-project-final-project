@@ -152,7 +152,7 @@ If the feature has been implemented by both students, write `both`.
 If you did not implement the feature
 
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
-|-------------------------------------- |--------------|----------------------|------------------------------------------|---------|         
+|-------------------------------------- |--------------|----------------------|------------------------------------------|---------|
 |`Up-to-date requirements.txt`          |NF            |Jia Hao Zhang         |x                                         |Only the base packages(15-10-2024)|
 |`ML/detect-features`                   |FN            |Jia Hao Zhang         |x|Only garentee to work for the premade test.|
 |`ML/artifact`                          |NF            |Jia Hao Zhang         |x|Added atributes that were in instructions into the class, without breaking detect feature. Not garrenteed to work on other situations.|
@@ -161,10 +161,10 @@ If you did not implement the feature
 |`ML/metric/extensions`                 |FN            |Marcus Persson        |x||
 |`ML/model`                             |NF            |Marcus Persson        |         | |
 |`ML/model/extensions`                  |FN            |Marcus Persson        |         | |
-|`ML/pipeline/evaluation`               |FN            |Marcus Persson        |         | | 
-| `ST/page/datasets`                    |NF            |Jia Hao Zhang         |X        |skeleton page layout made.|
+|`ML/pipeline/evaluation`               |FN            |Marcus Persson        |         | |
+| `ST/page/datasets`                    |NF            |Jia Hao Zhang         |X        |Basic dataset viewing and saving seems to work.|
 | `ST/datasets/management/create`       |FN            |Jia Hao Zhang         |X        |it does create new dataset fro now. needs more testing and seeing how to do it properly later.|
-|`ST/datasets/management/save`          |FN            |Jia Hao Zhang         |x        |It saves the dataset. no idea if it properly done. now just need to revisit datasets page to see if it is readable. |
+|`ST/datasets/management/save`          |FN            |Jia Hao Zhang         |x        |It saves the dataset. no idea if it properly done. only confirmed to that you can get to the data from dataset class data for previewing. |
 |`ST/page/modelling`                    |NF            |                      |         | |
 |`ST/modelling/datasets/list`           |FN            |                      |         | |
 |`ST/modelling/datasets/features`       |FN            |                      |         | |
