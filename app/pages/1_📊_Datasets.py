@@ -6,7 +6,7 @@ from app.datasets.management.create import create
 from app.datasets.management.save import save
 from autoop.core.ml.dataset import Dataset
 from copy import deepcopy
-from base64 import b64decode
+from os.path import join
 
 # your code here
 automl = AutoMLSystem.get_instance()
@@ -42,7 +42,7 @@ else:
     view_dataset = st.selectbox("select dataset", dataset_names)
 
     if view_dataset is not None:
-        st.dataframe(
-            pd.read_csv(
-                datasets[dataset_names.index(view_dataset)].asset_path)
-            )
+        with open(join("assets", "objects",
+                       datasets[dataset_names.index(view_dataset)].asset_path),
+                  "r+") as file:
+            st.dataframe(pd.read_csv(file))
