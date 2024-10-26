@@ -16,40 +16,39 @@ from model import Model  # noqa : E402
 class XGBRegressor(Model):
     """ XGBoost for regression wrapper """
     def __init__(self,
-                 objective: Literal['reg:squarederror', 'reg:absoluteerror',
-                                    'reg:squaredlogerror'
-                                    ] = 'reg:squarederror',
                  max_depth: int = 6,
                  learning_rate: float = 0.1,
                  n_estimators: int = 100,
-                 subsample: float = 1.0,
-                 colsample_bytree: float = 1.0,
                  gamma: float = 0.0,
-                 reg_lambda: float = 1.0,
-                 reg_alpha: float = 0.0
                  ) -> None:
         """
         Initialize the XGBoost model with various hyperparameters,
         as defined in the scikit-learn library.
-        :param objective: Objective function
         :param max_depth: Maximum depth
         :param learning_rate: Learning rate
         :param n_estimators: Number of estimators
-        :param subsample: Subsample ratio
-        :param colsample_bytree: Subsample ratio of columns
         :param gamma: Minimum loss reduction
-        :param reg_lambda: L2 regularization
-        :param reg_alpha: L1 regularization
+        We did not like how XGboost handles error messages, so we
+        decided to reimplement checking for parameter values.
         """
-        self._model = WrappedXGBRegressor(objective=objective,
-                                          max_depth=max_depth,
+        max_depth, learning_rate, n_estimators, gamma = \
+            self.validate_parameters(max_depth, learning_rate, n_estimators, 
+                                     gamma)
+        self._model = WrappedXGBRegressor(max_depth=max_depth,
                                           learning_rate=learning_rate,
                                           n_estimators=n_estimators,
-                                          subsample=subsample,
-                                          colsample_bytree=colsample_bytree,
-                                          gamma=gamma, reg_lambda=reg_lambda,
-                                          reg_alpha=reg_alpha)
+                                          gamma=gamma)
         super().__init__(type="regression")
+
+    def validate_parameters(max_depth: int,
+                            learning_rate: float,
+                            n_estimators: int,
+                            gamma: float) -> list:
+        """
+        Replaces every wrong parameter value with its default
+        value while informing the user.
+        """
+        pass  # start with sth like if learning rate < 0, print("Bad"), learning rate = 0.1
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """
@@ -72,3 +71,4 @@ class XGBRegressor(Model):
     def model(self) -> 'XGBRegressor':
         """ Returns a copy of model to prevent leakage. """
         return deepcopy(self._model)
+
