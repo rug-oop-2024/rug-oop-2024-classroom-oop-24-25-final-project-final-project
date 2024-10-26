@@ -25,7 +25,7 @@ class MultipleLogisticRegressor(Model):
         :param C: Inverse of regularization strength
         """
         self._model = LogisticRegression(penalty=penalty, C=C)
-        super().__init__()
+        super().__init__(type="classification")
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """

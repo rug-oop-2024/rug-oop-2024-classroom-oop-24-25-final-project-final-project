@@ -49,6 +49,7 @@ class XGBRegressor(Model):
                                           colsample_bytree=colsample_bytree,
                                           gamma=gamma, reg_lambda=reg_lambda,
                                           reg_alpha=reg_alpha)
+        super().__init__(type="regression")
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """

@@ -27,7 +27,7 @@ class SVMClassifier(Model):
         :param gamma: Kernel coefficient
         """
         self._model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma)
-        super().__init__()
+        super().__init__(type="classification")
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """
