@@ -26,6 +26,8 @@ class SVMClassifier(Model):
         :param degree: Degree of polynomial kernel
         :param gamma: Kernel coefficient
         """
+        C, kernel, degree, gamma = self.validate_parameters(C, kernel, degree,
+                                                            gamma)
         self._model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma)
         super().__init__(type="classification")
 
