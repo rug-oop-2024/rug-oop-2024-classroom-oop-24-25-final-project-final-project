@@ -37,7 +37,7 @@ class MultipleLinearRegression(Model):
         self._parameters = {
             "_coef": all_parameters[1:],
             "_intercept": all_parameters[0]
-        }  # Splitting the vector into weights and bias
+        }  # Splitting the vector into weights and biasc
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         """

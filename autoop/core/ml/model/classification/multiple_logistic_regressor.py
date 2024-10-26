@@ -1,5 +1,5 @@
 from sklearn.linear_model import LogisticRegression
-from typing import Literal
+from typing import Literal, Tuple
 from copy import deepcopy
 
 import numpy as np
@@ -26,6 +26,32 @@ class MultipleLogisticRegressor(Model):
         """
         self._model = LogisticRegression(penalty=penalty, C=C)
         super().__init__(type="classification")
+
+    def validate_parameters(
+        self,
+        C: float,
+        penalty: Literal['l1', 'l2', 'elasticnet', 'none']
+    ) -> Tuple[float, Literal['l1', 'l2', 'elasticnet', 'none']]:
+        """
+        Validates the parameters for the model.
+        Replaces every wrong parameter with its default
+        value while informing the user of the change.
+        """
+        if not isinstance(C, float):
+            print("C, the regularization parameter, must be a float. "
+                  "Setting to default value 1.0")
+            C = 1.0
+        if C <= 0:
+            print("C, the regularization parameter, must be positive. "
+                  "Setting to default value 1.0")
+            C = 1.0
+
+        if penalty not in ['l1', 'l2', 'elasticnet', 'none']:
+            print("Penalty must be 'l1', 'l2', 'elasticnet', or 'none'. "
+                  "Setting to default value 'l2'")
+            penalty = 'l2'
+
+        return C, penalty
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """
