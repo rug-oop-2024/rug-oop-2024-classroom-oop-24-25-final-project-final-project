@@ -21,7 +21,7 @@ class Artifact(BaseModel):
         """
         base64_asset_path = base64.b64encode(self.asset_path.encode()).decode()
         return f"{base64_asset_path}:{self.version}"
-    # what the fuck is that class even doing XDDD 
+    # what the fuck is that class even doing XDDD
     # to figure out: how to know which path to read/save to
     # how this should generally work to ensure anything is saved in the right place
     # and with the right type 
@@ -33,8 +33,8 @@ class Artifact(BaseModel):
         return self.data
 
     def save(self) -> None:
-        """ 
-        Save the artifact's data to the specified asset path. 
+        """
+        Save the artifact's data to the specified asset path.
         Raises an exception if the directory does not exist.
         """
         os.makedirs(os.path.dirname(self.asset_path), exist_ok=True)

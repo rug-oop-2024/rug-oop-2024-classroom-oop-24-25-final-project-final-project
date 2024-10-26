@@ -17,7 +17,8 @@ st.subheader("Available Datasets")
 if datasets:
     dataset_names = [dataset.name for dataset in datasets]
     selected_dataset_name = st.selectbox("Select a dataset", dataset_names)
-    selected_dataset = next(ds for ds in datasets if ds.name == selected_dataset_name)
+    selected_dataset = next(ds for ds in datasets if
+                            ds.name == selected_dataset_name)
 
     if st.button("Show Preview"):
         data = selected_dataset.read() 
@@ -25,9 +26,10 @@ if datasets:
         st.dataframe(data.head())
 
     if st.button("Delete Dataset"):
-        automl.registry.delete(selected_dataset)
-        st.warning(f"Deleted {selected_dataset_name}")
-        st.rerun()  # Change here from experimental_rerun to rerun
+        if st.button("Confirm Deletion"):
+            automl.registry.delete(selected_dataset)
+            st.warning(f"Deleted {selected_dataset_name}")
+            st.rerun()  # Change here from experimental_rerun to rerun
 
 else:
     st.info("No datasets available in the system. Please upload one.")

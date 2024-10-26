@@ -1,7 +1,5 @@
 from pydantic import BaseModel, Field
 from typing import Literal
-from autoop.core.ml.dataset import Dataset
-import numpy as np
 
 
 class Feature(BaseModel):

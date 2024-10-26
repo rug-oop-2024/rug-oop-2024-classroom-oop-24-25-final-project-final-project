@@ -1,5 +1,4 @@
 from xgboost import XGBRegressor as WrappedXGBRegressor
-from pydantic import PrivateAttr
 from typing import Literal
 from copy import deepcopy
 

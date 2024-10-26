@@ -58,20 +58,3 @@ class SVMClassifier(Model):
     def model(self) -> 'SVMClassifier':
         """ Returns a copy of model to prevent leakage. """
         return deepcopy(self._model)
-
-
-#test the class for functionality on a random sklearn dataset
-
-if __name__ == "__main__":
-
-    from sklearn.datasets import load_iris
-    from sklearn.model_selection import train_test_split
-    iris = load_iris()
-    X_train, X_test, y_train, y_test = train_test_split(
-        iris.data, iris.target, test_size=0.1, random_state=42
-    )
-
-    model = SVMClassifier()
-    model.fit(X_train, y_train)
-    predictions = model.predict(X_test)
-    print(predictions)
