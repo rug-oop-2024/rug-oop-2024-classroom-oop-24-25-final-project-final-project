@@ -5,7 +5,9 @@ from app.core.system import AutoMLSystem
 from app.datasets.list import list_dataset
 from autoop.core.ml.dataset import Dataset
 from autoop.core.ml.feature import Feature
+from autoop.core.ml.model.model import Model
 from autoop.functional.feature import detect_feature_types
+from app.modelling.models import get_models
 
 
 st.set_page_config(page_title="Modelling", page_icon="📈")
@@ -21,12 +23,12 @@ write_helper_text(
     "you can design a machine learning pipeline to train a model on a dataset."
     )
 
-automl = AutoMLSystem.get_instance()
+automl: AutoMLSystem = AutoMLSystem.get_instance()
 
-datasets = list_dataset(automl.registry.list(type="dataset"))
+datasets: list[Dataset] = list_dataset(automl.registry.list(type="dataset"))
 
 # your code here
-dataset_names = [_.name for _ in datasets]
+dataset_names: list[str] = [_.name for _ in datasets]
 
 selected_dataset = st.selectbox("Select dataset to model", dataset_names)
 
@@ -42,7 +44,7 @@ input_features: list[Feature] = st.multiselect("select inout features",
                                                 if feature != target_colum])
 
 if target_colum is None:
-    task_type = "(No target selected.)"
+    task_type: str = "(No target selected.)"
 else:
     match target_colum.type:
         case "numerical":
@@ -51,3 +53,6 @@ else:
             task_type = "classification"
 
 st.write(f"Detected task type is {task_type}.")
+
+if target_colum is not None:
+    model: Model = st.selectbox("select model.", get_models(task_type))
