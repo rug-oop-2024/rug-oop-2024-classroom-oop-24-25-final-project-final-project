@@ -5,16 +5,17 @@ import base64
 class Artifact(BaseModel):
     """Class Artifact
     Attributes:
-        "asset_path": "users/mo-assaf/models/yolov8.pth",
-        "version": "1.0.2", 
-        "data": b"binary_state_data",
-        "metadata": {
-            "experiment_id": "exp-123fbdiashdb",
-            "run_id": "run-12378yufdh89afd",
-        },
-        "type": "model:torch",
-        "tags": ["computer_vision", "object_detection"],
-        "id": "{base64(asset_path)}:{version}"
+        type
+        name
+        data
+        version
+        asset_path
+        metadata
+        tags
+    Methods:
+        id
+        read
+        save 
     """
     
     type: str = Field(default="model:torch")
